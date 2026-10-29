@@ -14,11 +14,52 @@
 
 ---
 
+## 📌 Repository Purpose & Team Architecture Breakdown
+
+### 💡 Why do we have separate repositories?
+When multiple engineers build a large cybersecurity system, pushing changes into a single repository causes merge conflicts and overwrites active teammate code. 
+
+To keep the Panopticon codebase modular, clean, and easily verifiable, the project is structured across dedicated repositories:
+
+### 1. `Panopticon-Co/panopticon-sentinel-ui-aditya` (This Repository)
+* **Type:** **Frontend-Only Repository**
+* **Author / Architect:** Aditya Singh (Lead Detection & Dashboard Architect, Roll: K064)
+* **What it is in plain English:**
+  > **"The Analyst's Screen"** — This is purely the **visual web dashboard (UI)** that a security analyst looks at in their browser to monitor threats, triage detections, and take action.
+* **Core Capabilities:**
+  * **4-Slide Navigation Engine:** Seamless CSS-driven slide transitions across `#overview`, `#endpoints`, `#alerts`, and `#response` without page reloads.
+  * **Closed 7-Action Response Vocabulary:** Integrated response controls (*Kill Process*, *Isolate Host*, *Quarantine File*, etc.) with mandatory analyst justification modals for destructive actions.
+  * **Zero-Setup Standalone or Proxied:** Operates zero-config offline from sample telemetry (`alerts.ndjson`), or connects live to the backend with server-side bearer token encapsulation.
+* **Why this repository exists:**
+  * For teammates, professors, or evaluators who want to inspect, run, or grade **just the frontend and analyst UX** without needing Java runtimes, backend databases, or complex build tools.
+
+### 2. [Panopticon-Co/panopticon-edr-dashboard](https://github.com/Panopticon-Co/panopticon-edr-dashboard)
+* **Type:** **Full-Stack Capstone Monorepo**
+* **Author / Architect:** Aditya Singh (Lead Detection & Dashboard Architect, Roll: K064)
+* **What it is in plain English:**
+  > **"The Complete All-in-One System"** — Unifies the Sentinel UI console with a high-throughput Spring Boot Java backend (`:8788`), SQLite persistence (`panopticon.db`), and the complete 49-case E2E test suite. Serves as the primary end-to-end capstone demonstration.
+
+### 3. [Panopticon-Co/panopticon-console](https://github.com/Panopticon-Co/panopticon-console)
+* **Type:** **Teammate Workspace**
+* **Author / Lead:** Rishi Bose
+* **What it is in plain English:**
+  > **"Forensic Evidence & Artifacts"** — Rishi's dedicated workspace focusing on cryptographic verification of artifacts and signed forensic downloads. Maintained independently to prevent code collisions.
+
+### 📋 Summary Matrix for Evaluators
+
+| Repository | Focus | Tech Stack | Main Purpose |
+| :--- | :--- | :--- | :--- |
+| **`panopticon-sentinel-ui-aditya`** *(This Repo)* | **Frontend Only** | HTML5, CSS Tokens, Vanilla JS, Python Proxy | Lightweight, plug-and-play analyst web UI. |
+| **`panopticon-edr-dashboard`** | **Full-Stack** | JS, CSS, Python, Java 21, Spring Boot, SQLite | Complete end-to-end capstone system. |
+| **`panopticon-console`** | **Forensics / Artifacts** | Python, Evidence Verifier | Rishi's signed evidence & download engine. |
+
+---
+
 ## 1. Executive Summary
 
 **Panopticon Sentinel UI** is a SentinelOne-inspired security operations console for the Panopticon EDR/XDR platform. It delivers real-time threat visualization, endpoint investigation, and active incident response execution across Linux and Windows fleets.
 
-This repository represents the official **frontend-only extraction** of Aditya Singh's latest verified dashboard architecture, ensuring clean separation of concerns from teammate repositories (such as Rishi Bose's evidence verification console in `panopticon-console`) while maintaining strict 1:1 API contract parity with `panopticon-manager` and `panopticon-response-engine`.
+This repository represents the official **frontend-only extraction** of Aditya Singh's latest verified dashboard architecture, ensuring clean separation of concerns while maintaining strict 1:1 API contract parity with `panopticon-manager` and `panopticon-response-engine`.
 
 ---
 
@@ -67,6 +108,7 @@ panopticon-sentinel-ui-aditya/
 ├── app.py                      # Standalone or Proxied Python Web Console server
 ├── alerts.ndjson               # Local golden telemetry alert fixtures (offline mode)
 ├── start_console.bat           # 1-click Windows startup script
+├── run_tests.bat               # 1-click test suite runner (all 113 tests)
 ├── static/
 │   ├── index.html              # SentinelOne-inspired 4-slide single-page application
 │   ├── app.js                  # Frontend logic & state management (zero build step)
